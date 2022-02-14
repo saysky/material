@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.sens.mapper.UserMapper">
+
+    <sql id="normal">0</sql>
+    <sql id="ban">1</sql>
+    <sql id="deleted">2</sql>
+
+    <select id="findByRoleId" resultType="com.example.sens.entity.User">
+      SELECT
+          t.*
+      FROM
+          user_role_ref r,
+          user t
+      WHERE
+          r.role_id = #{roleId} AND
+          r.user_id = t.id
+      ORDER BY
+          t.id DESC
+  </select>
+
+    <select id="findByRoleIdAndCondition" resultType="com.example.sens.entity.User">
+        SELECT
+        t.*
+        FROM
+        user_role_ref r,
+        user t
+        WHERE
+        r.role_id = #{roleId} AND
+        r.user_id = t.id
+        <if test="user.status != null and user.status != ''">
+            AND t.status = #{user.status}
+        </if>
+        <if test="user.userName != null and user.userName != ''">
+            AND t.user_name LIKE CONCAT('%', #{user.userName}, '%')
+        </if>
+        <if test="user.email != null and user.email != ''">
+            AND t.email LIKE CONCAT('%', #{user.email}, '%')
+        </if>
+        <if test="user.phone != null and user.phone != ''">
+            AND t.phone LIKE CONCAT('%', #{user.phone}, '%')
+        </if>
+        <if test="user.userName != null and user.userName != ''">
+            AND t.user_name LIKE CONCAT('%', #{user.userName}, '%')
+        </if>
+        <if test="user.userDisplayName != null and user.userDisplayName != ''">
+            AND t.user_display_name LIKE CONCAT('%', #{user.userDisplayName}, '%')
+        </if>
+        <if test="user.realName != null and user.realName != ''">
+            AND t.real_name LIKE CONCAT('%', #{user.realName}, '%')
+        </if>
+        ORDER BY
+        t.id DESC
+    </select>
+
+
+    <select id="findByCondition" resultType="com.example.sens.entity.User">
+        SELECT
+        t.*
+        FROM
+        user t
+        WHERE
+        1 = 1
+        <if test="user.status != null and user.status != ''">
+            AND t.status = #{user.status}
+        </if>
+        <if test="user.userName != null and user.userName != ''">
+            AND t.user_name LIKE CONCAT('%', #{user.userName}, '%')
+        </if>
+        <if test="user.email != null and user.email != ''">
+            AND t.email LIKE CONCAT('%', #{user.email}, '%')
+        </if>
+        <if test="user.phone != null and user.phone != ''">
+            AND t.phone LIKE CONCAT('%', #{user.phone}, '%')
+        </if>
+        <if test="user.userDisplayName != null and user.userDisplayName != ''">
+            AND t.user_display_name LIKE CONCAT('%', #{user.userDisplayName}, '%')
+        </if>
+        <if test="user.realName != null and user.realName != ''">
+            AND t.real_name LIKE CONCAT('%', #{user.realName}, '%')
+        </if>
+        ORDER BY
+        t.id DESC
+    </select>
+
+
+    <select id="getSalarySum" resultType="java.lang.Double">
+        SELECT
+            ifnull(sum( j.salary ),0)
+        FROM
+            USER u,
+            job j
+        WHERE
+            u.job_id
+            AND j.id
+    </select>
+</mapper>

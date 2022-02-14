@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.sens.mapper.OrderMapper">
+    <update id="updateOverDueOrder">
+        update `order` set status = 'over_due'
+        WHERE end_date &lt; now()
+    </update>
+
+
+
+    <select id="findByUserIdAndPostId" resultType="com.example.sens.entity.Order">
+        select * from `order`
+        where user_id = #{userId} AND post_id = #{postId}
+        AND status  = 'has_checkout'
+    </select>
+    <select id="getMaxOrderNo" resultType="java.lang.String">
+        select max(order_no) from `order`
+    </select>
+
+    <select id="getCurrentMonthPrice" resultType="java.lang.Double">
+        SELECT
+            ifnull(sum( price ),0)
+        FROM
+            `order`
+        WHERE
+            DATE_FORMAT( create_time, '%Y%m' ) = DATE_FORMAT( CURDATE( ), '%Y%m' )
+    </select>
+
+
+</mapper>
